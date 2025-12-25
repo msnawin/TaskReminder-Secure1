@@ -6,6 +6,7 @@
     <title>Authorize | TaskCloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body { background: #020617; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -13,6 +14,12 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 400px; height: 400px; background: #6366f1; border-radius: 50%;
             filter: blur(150px); opacity: 0.15; z-index: -1;
+        }
+        .swal2-popup-custom {
+            border-radius: 2.5rem !important;
+            background: #0f172a !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            backdrop-filter: blur(20px);
         }
     </style>
 </head>
@@ -29,18 +36,24 @@
             <p class="text-slate-500 text-sm font-bold mt-2 uppercase tracking-widest">Digital Workspace Access</p>
         </div>
 
-        <button onclick="location.href='/oauth2/authorization/google'"
-                class="w-full py-4 bg-white text-black rounded-2xl flex items-center justify-center gap-4 font-800 hover:bg-slate-200 transition-all mb-8">
+        <button onclick="location.href='/auth/google/login'"
+                class="w-full py-4 bg-white text-black rounded-2xl flex items-center justify-center gap-4 font-800 hover:bg-slate-200 transition-all mb-8 transform active:scale-95">
             <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-6 h-6">
             Sign in with Google
         </button>
 
-        <form action="/login" method="post" class="space-y-4">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="h-px bg-white/5 flex-1"></div>
+            <span class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Manual Access</span>
+            <div class="h-px bg-white/5 flex-1"></div>
+        </div>
+
+        <form action="/perform_login" method="post" class="space-y-4">
             <input type="email" name="username" placeholder="Email Reference" required
                    class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-white/5 text-white focus:border-indigo-500 outline-none font-bold placeholder:text-slate-600 transition-all">
             <input type="password" name="password" placeholder="Passcode" required
                    class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-white/5 text-white focus:border-indigo-500 outline-none font-bold placeholder:text-slate-600 transition-all">
-            <button type="submit" class="w-full bg-indigo-600 text-white font-800 py-5 rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-500 transition-all">
+            <button type="submit" class="w-full bg-indigo-600 text-white font-800 py-5 rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-500 transition-all transform active:scale-95">
                 Establish Connection
             </button>
         </form>
@@ -51,6 +64,23 @@
     </div>
 </div>
 
-<script>lucide.createIcons();</script>
+<script>
+    lucide.createIcons();
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'not_registered') {
+            Swal.fire({
+                title: '<span style="color: #f8fafc">Identity Not Found</span>',
+                text: "This Google account isn't registered. Please sign up first.",
+                icon: 'warning',
+                background: '#0f172a',
+                confirmButtonColor: '#6366f1',
+                confirmButtonText: 'Register Now',
+                showCancelButton: true,
+                customClass: { popup: 'swal2-popup-custom' }
+            }).then((result) => { if (result.isConfirmed) window.location.href = '/register.html'; });
+        }
+    });
+</script>
 </body>
 </html>

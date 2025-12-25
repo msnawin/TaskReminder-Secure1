@@ -23,15 +23,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Public access for assets, login/register pages, and the registration API
-                        .requestMatchers("/login.html", "/register.html", "/api/users/register", "/api/auth/**", "/css/**", "/js/**").permitAll()
-                        // Lock everything else (including / and /dashboard)
+                        .requestMatchers("/login.html", "/register.html", "/auth/google/**", "/api/users/register", "/api/auth/**", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login.html")
                         .loginProcessingUrl("/perform_login")
-                        .defaultSuccessUrl("/dashboard", true) // Success goes to our virtual dashboard path
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
                 .oauth2Login(oauth -> oauth
