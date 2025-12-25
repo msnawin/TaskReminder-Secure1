@@ -1,29 +1,29 @@
 package com.todoapp20.TodoApplication.Config;
 
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.todoapp20.TodoApplication.Service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, OAuth2SuccessHandler successHandler) throws Exception {
+    private final CustomUserDetailsService userDetailsService;
+    private final OAuth2SuccessHandler successHandler;
+    public SecurityConfig(CustomUserDetailsService userDetailsService, OAuth2SuccessHandler successHandler) {
+        this.userDetailsService = userDetailsService;
+        this.successHandler = successHandler;
+    }
+    @Bean public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    @Bean public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login(oauth -> oauth.successHandler(successHandler))
-                .logout(l -> l.logoutSuccessUrl("/"));
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/login.html", "/register.html", "/api/auth/**", "/css/**").permitAll().anyRequest().authenticated())
+                .formLogin(form -> form.loginPage("/login.html").loginProcessingUrl("/perform_login").defaultSuccessUrl("/", true).permitAll())
+                .oauth2Login(oauth -> oauth.loginPage("/login.html").successHandler(successHandler))
+                .logout(logout -> logout.logoutSuccessUrl("/login.html"));
         return http.build();
     }
 }
+
+

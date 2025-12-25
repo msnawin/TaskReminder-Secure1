@@ -1,8 +1,5 @@
 package com.todoapp20.TodoApplication.Repository;
 
-
-
-
 import com.todoapp20.TodoApplication.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;

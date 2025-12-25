@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | TaskCloud</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen">
+<div class="bg-white p-12 rounded-[2.5rem] shadow-xl w-full max-w-md border">
+    <div class="text-center mb-10"><h1 class="text-3xl font-extrabold">Welcome Back</h1></div>
+    <form action="/perform_login" method="POST" class="space-y-5">
+        <input type="email" name="username" required placeholder="Email" class="w-full px-5 py-3.5 rounded-2xl border">
+        <input type="password" name="password" required placeholder="Password" class="w-full px-5 py-3.5 rounded-2xl border">
+        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl">Sign In</button>
+    </form>
+    <div class="text-center my-6 text-slate-400">OR</div>
+    <button onclick="location.href='/oauth2/authorization/google'" class="w-full border py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5"> Google
+    </button>
+    <p class="text-center mt-6">New user? <a href="/register.html" class="text-indigo-600 font-bold">Register</a></p>
+</div>
+</body>
+</html>
