@@ -1,5 +1,6 @@
 package com.todoapp20.TodoApplication.Model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +14,9 @@ public class Todo {
     private String title;
     private boolean completed = false;
     private LocalDate dueDate;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority = Priority.LOW; // Default value
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,6 +32,8 @@ public class Todo {
     public void setCompleted(boolean completed) { this.completed = completed; }
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+    public Priority getPriority() { return priority; }
+    public void setPriority(Priority priority) { this.priority = priority; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 }

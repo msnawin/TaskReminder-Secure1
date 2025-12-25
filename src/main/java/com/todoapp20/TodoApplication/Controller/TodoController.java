@@ -1,6 +1,6 @@
 package com.todoapp20.TodoApplication.Controller;
 
-
+import com.todoapp20.TodoApplication.Model.Priority;
 import com.todoapp20.TodoApplication.Model.Todo;
 import com.todoapp20.TodoApplication.Model.User;
 import com.todoapp20.TodoApplication.Repository.TodoRepository;
@@ -30,6 +30,8 @@ public class TodoController {
     @PostMapping
     public Todo create(@RequestBody Todo todo, Authentication auth) {
         todo.setUser(getAuthUser(auth));
+        // Ensure a default if none provided
+        if (todo.getPriority() == null) todo.setPriority(Priority.LOW);
         return todoRepository.save(todo);
     }
 
@@ -39,6 +41,13 @@ public class TodoController {
         todo.setCompleted(!todo.isCompleted());
         todoRepository.save(todo);
     }
+    @PatchMapping("/{id}/priority")
+    public void updatePriority(@PathVariable Long id, @RequestParam Priority priority) {
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        todo.setPriority(priority);
+        todoRepository.save(todo);
+    }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
