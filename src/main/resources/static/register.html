@@ -6,6 +6,7 @@
     <title>Register | TaskCloud Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body { background: #020617; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -48,18 +49,14 @@
         </div>
 
         <form action="/api/users/register" method="post" class="space-y-4">
-            <div>
-                <input type="text" name="name" placeholder="Full Name" required
-                       class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
-            </div>
-            <div>
-                <input type="email" name="username" placeholder="Email Address" required
-                       class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
-            </div>
-            <div>
-                <input type="password" name="password" placeholder="Access Code" required
-                       class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
-            </div>
+            <input type="text" name="name" placeholder="Full Name" required
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
+
+            <input type="email" name="username" placeholder="Email Address" required
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
+
+            <input type="password" name="password" placeholder="Access Code" required
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-800/40 border border-white/5 text-white focus:border-purple-500 outline-none font-bold placeholder:text-slate-600 transition-all">
 
             <button type="submit" class="w-full bg-purple-600 text-white font-800 py-5 rounded-2xl shadow-xl shadow-purple-500/20 hover:bg-purple-500 transition-all mt-4 transform active:scale-95">
                 Generate Account
@@ -74,6 +71,23 @@
     </div>
 </div>
 
-<script>lucide.createIcons();</script>
+<script>
+    lucide.createIcons();
+
+    // Check for registration errors
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'already_exists') {
+            Swal.fire({
+                title: 'Identity Exists',
+                text: 'This email is already registered. Please sign in.',
+                icon: 'info',
+                background: '#0f172a',
+                color: '#f8fafc',
+                confirmButtonColor: '#9333ea'
+            });
+        }
+    });
+</script>
 </body>
 </html>

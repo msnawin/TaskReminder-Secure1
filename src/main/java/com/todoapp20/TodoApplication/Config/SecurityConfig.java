@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .loginPage("/login.html")
                         .loginProcessingUrl("/perform_login")
                         .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login.html?error=bad_credentials") // REDIRECT ON WRONG PASSWORD
                         .permitAll()
                 )
                 .oauth2Login(oauth -> oauth
@@ -39,12 +40,9 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login.html?logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
                         .permitAll());
 
         return http.build();
     }
 }
-
 

@@ -31,22 +31,19 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         HttpSession session = request.getSession();
         String intent = (String) session.getAttribute("AUTH_INTENT");
-
         Optional<User> existingUser = userRepository.findByEmail(email);
 
         if ("REGISTER".equals(intent)) {
-            // REGISTRATION FLOW: Create user if missing, then allow entry
             if (existingUser.isEmpty()) {
-                User newUser = new User();
-                newUser.setEmail(email);
-                newUser.setName(name);
-                newUser.setAuthProvider(AuthProvider.GOOGLE);
-                userRepository.save(newUser);
+                User user = new User();
+                user.setEmail(email);
+                user.setName(name);
+                user.setAuthProvider(AuthProvider.GOOGLE);
+                userRepository.save(user);
                 emailService.sendWelcomeEmail(email, name);
             }
             response.sendRedirect("/dashboard");
         } else {
-            // LOGIN FLOW: Strict database check
             if (existingUser.isPresent()) {
                 response.sendRedirect("/dashboard");
             } else {
