@@ -11,17 +11,40 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final OAuth2SuccessHandler successHandler;
+
     public SecurityConfig(CustomUserDetailsService userDetailsService, OAuth2SuccessHandler successHandler) {
         this.userDetailsService = userDetailsService;
         this.successHandler = successHandler;
     }
+
     @Bean public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
-    @Bean public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/login.html", "/register.html", "/api/auth/**", "/css/**").permitAll().anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login.html").loginProcessingUrl("/perform_login").defaultSuccessUrl("/", true).permitAll())
-                .oauth2Login(oauth -> oauth.loginPage("/login.html").successHandler(successHandler))
-                .logout(logout -> logout.logoutSuccessUrl("/login.html"));
+                .authorizeHttpRequests(auth -> auth
+                        // Public access for assets, login/register pages, and the registration API
+                        .requestMatchers("/login.html", "/register.html", "/api/users/register", "/api/auth/**", "/css/**", "/js/**").permitAll()
+                        // Lock everything else (including / and /dashboard)
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login.html")
+                        .loginProcessingUrl("/perform_login")
+                        .defaultSuccessUrl("/dashboard", true) // Success goes to our virtual dashboard path
+                        .permitAll()
+                )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login.html")
+                        .successHandler(successHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login.html?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
+
         return http.build();
     }
 }

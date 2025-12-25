@@ -27,20 +27,19 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String email = oUser.getAttribute("email");
         String name = oUser.getAttribute("name");
 
-        // Logic: If user doesn't exist, this IS a "Sign-Up" event.
         if (userRepository.findByEmail(email).isEmpty()) {
             User user = new User();
             user.setEmail(email);
             user.setName(name);
-            user.setPassword(null); // No password for OAuth users
+            user.setPassword(null);
             user.setAuthProvider(AuthProvider.GOOGLE);
             userRepository.save(user);
 
-            // Send welcome email to new Google sign-ups
+            // Send welcome email
             emailService.sendWelcomeEmail(email, name);
         }
 
-        // Redirect to dashboard (works for both existing and new users)
-        response.sendRedirect("/");
+        // REDIRECT TO DASHBOARD (The virtual path we created in WebController)
+        response.sendRedirect("/dashboard");
     }
 }

@@ -2,23 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | TaskCloud</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authorize | TaskCloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .login-orb {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; height: 400px; background: #6366f1; border-radius: 50%;
+            filter: blur(150px); opacity: 0.15; z-index: -1;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 flex items-center justify-center min-h-screen">
-<div class="bg-white p-12 rounded-[2.5rem] shadow-xl w-full max-w-md border">
-    <div class="text-center mb-10"><h1 class="text-3xl font-extrabold">Welcome Back</h1></div>
-    <form action="/perform_login" method="POST" class="space-y-5">
-        <input type="email" name="username" required placeholder="Email" class="w-full px-5 py-3.5 rounded-2xl border">
-        <input type="password" name="password" required placeholder="Password" class="w-full px-5 py-3.5 rounded-2xl border">
-        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl">Sign In</button>
-    </form>
-    <div class="text-center my-6 text-slate-400">OR</div>
-    <button onclick="location.href='/oauth2/authorization/google'" class="w-full border py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5"> Google
-    </button>
-    <p class="text-center mt-6">New user? <a href="/register.html" class="text-indigo-600 font-bold">Register</a></p>
+<body class="min-h-screen flex items-center justify-center p-6 overflow-hidden">
+<div class="login-orb"></div>
+
+<div class="w-full max-w-md">
+    <div class="bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-12 rounded-[3rem] shadow-2xl relative overflow-hidden">
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-indigo-500 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-indigo-500/40">
+                <i data-lucide="zap" class="text-white fill-white w-8 h-8"></i>
+            </div>
+            <h1 class="text-3xl font-800 text-white tracking-tighter">Initialize Identity</h1>
+            <p class="text-slate-500 text-sm font-bold mt-2 uppercase tracking-widest">Digital Workspace Access</p>
+        </div>
+
+        <button onclick="location.href='/oauth2/authorization/google'"
+                class="w-full py-4 bg-white text-black rounded-2xl flex items-center justify-center gap-4 font-800 hover:bg-slate-200 transition-all mb-8">
+            <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-6 h-6">
+            Sign in with Google
+        </button>
+
+        <form action="/login" method="post" class="space-y-4">
+            <input type="email" name="username" placeholder="Email Reference" required
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-white/5 text-white focus:border-indigo-500 outline-none font-bold placeholder:text-slate-600 transition-all">
+            <input type="password" name="password" placeholder="Passcode" required
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-white/5 text-white focus:border-indigo-500 outline-none font-bold placeholder:text-slate-600 transition-all">
+            <button type="submit" class="w-full bg-indigo-600 text-white font-800 py-5 rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-500 transition-all">
+                Establish Connection
+            </button>
+        </form>
+
+        <p class="text-center text-xs font-bold text-slate-600 mt-10 uppercase tracking-widest">
+            Need access? <a href="/register.html" class="text-indigo-400 hover:text-white transition-colors underline decoration-2 underline-offset-4">Register Account</a>
+        </p>
+    </div>
 </div>
+
+<script>lucide.createIcons();</script>
 </body>
 </html>
