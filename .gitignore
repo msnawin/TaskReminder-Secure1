@@ -1,0 +1,19 @@
+# Java/Maven ignore
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE ignore
+.idea/
+*.iml
+.vscode/
+.nbprojects/
+
+# Operating System ignore
+.DS_Store
+Thumbs.db
+
+# Security ignore (IMPORTANT)
+.env

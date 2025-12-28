@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskCloud | Precision Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            background-image: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 25%),
+                              radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.15) 0%, transparent 25%);
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* NATIVE CALENDAR PICKER VISIBILITY FIX */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(100%) sepia(100%) saturate(10000%) hue-rotate(240deg);
+            cursor: pointer;
+            opacity: 0.9;
+        }
+
+        /* HIGH DIFFERENTIATION PRIORITY CARDS */
+        .priority-card-HIGH {
+            background: rgba(239, 68, 68, 0.07) !important;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+            box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+        .priority-card-MEDIUM {
+            background: rgba(245, 158, 11, 0.05) !important;
+            border: 1px solid rgba(245, 158, 11, 0.3) !important;
+            box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.05);
+        }
+        .priority-card-LOW {
+            background: rgba(16, 185, 129, 0.05) !important;
+            border: 1px solid rgba(16, 185, 129, 0.3) !important;
+            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.05);
+        }
+
+        /* HIGH VISIBILITY SOLID BADGES */
+        .badge-HIGH { background: #ef4444; color: white; }
+        .badge-MEDIUM { background: #f59e0b; color: #020617; }
+        .badge-LOW { background: #10b981; color: white; }
+
+        .task-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .task-card:hover {
+            transform: translateX(8px);
+            filter: brightness(1.2);
+        }
+
+        .cb-custom {
+            width: 24px; height: 24px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .cb-custom.checked {
+            background: #6366f1;
+            border-color: #6366f1;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<nav class="border-b border-white/5 bg-slate-950/50 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <i data-lucide="zap" class="text-white fill-white w-5 h-5"></i>
+            </div>
+            <span class="text-xl font-800 tracking-tight text-white">TaskCloud <span class="text-indigo-400">Pro</span></span>
+        </div>
+        <button onclick="location.href='/logout'" class="text-slate-400 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+        </button>
+    </div>
+</nav>
+
+<main class="max-w-6xl mx-auto p-6 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+    <div class="lg:col-span-5">
+        <div class="glass-panel p-8 rounded-[2.5rem] sticky top-32 shadow-2xl">
+            <h2 class="text-2xl font-800 text-white mb-8">New Initiative</h2>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Task Definition</label>
+                    <input type="text" id="taskTitle" placeholder="Capture your next goal..."
+                           class="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-semibold text-white">
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Priority Selection</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="setPriority('LOW', this)" class="priority-opt p-3 rounded-xl border border-white/5 bg-slate-900/50 text-xs font-bold transition-all hover:bg-slate-800 text-slate-400">LOW</button>
+                        <button onclick="setPriority('MEDIUM', this)" class="priority-opt p-3 rounded-xl border border-white/5 bg-slate-900/50 text-xs font-bold transition-all hover:bg-slate-800 text-slate-400">MED</button>
+                        <button onclick="setPriority('HIGH', this)" class="priority-opt p-3 rounded-xl border-indigo-500 bg-indigo-500/10 text-indigo-400 text-xs font-bold transition-all">HIGH</button>
+                    </div>
+                    <input type="hidden" id="taskPriority" value="HIGH">
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Maturity Date</label>
+                    <input type="date" id="taskDate" class="w-full bg-slate-800/60 border border-white/10 rounded-2xl px-6 py-4 outline-none text-white font-medium focus:border-indigo-400 transition-all">
+                </div>
+
+                <button id="addTaskBtn" class="btn-primary w-full text-white font-800 py-5 rounded-2xl transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3">
+                    Deploy Task <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:col-span-7">
+        <div id="taskList" class="space-y-4">
+        </div>
+    </div>
+</main>
+
+<script>
+    function setPriority(val, btn) {
+        document.getElementById('taskPriority').value = val;
+        document.querySelectorAll('.priority-opt').forEach(b => {
+            b.className = 'priority-opt p-3 rounded-xl border border-white/5 bg-slate-900/50 text-xs font-bold transition-all hover:bg-slate-800 text-slate-400';
+        });
+        btn.className = 'priority-opt p-3 rounded-xl border-indigo-500 bg-indigo-500/10 text-indigo-400 text-xs font-bold transition-all';
+    }
+
+    async function fetchTasks() {
+        const res = await fetch("/api/todos");
+        if (res.ok) renderTasks(await res.json());
+    }
+
+    function renderTasks(tasks) {
+        const container = document.getElementById('taskList');
+        container.innerHTML = tasks.length === 0 ?
+            `<div class="glass-panel p-20 rounded-[3rem] text-center border-dashed border-white/10">
+                <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">Awaiting Input...</p>
+             </div>` : '';
+
+        tasks.forEach(task => {
+            const div = document.createElement('div');
+            div.className = `task-card p-6 rounded-3xl flex items-center justify-between priority-card-${task.priority} ${task.completed ? 'opacity-30 grayscale' : ''}`;
+
+            div.innerHTML = `
+                <div class="flex items-center gap-6">
+                    <div class="cb-custom ${task.completed ? 'checked' : ''} flex items-center justify-center" onclick="toggleTask(${task.id})">
+                        ${task.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold ${task.completed ? 'line-through text-slate-500' : 'text-white'}">${task.title}</h3>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span class="px-2.5 py-0.5 rounded-md text-[9px] font-900 uppercase tracking-wider badge-${task.priority}">
+                                ${task.priority}
+                            </span>
+                            <span class="text-[10px] font-bold text-indigo-300 flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${task.dueDate || 'No Date'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="deleteTask(${task.id})" class="text-slate-500 hover:text-red-500 transition-colors p-2">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        });
+        lucide.createIcons();
+    }
+
+    document.getElementById('addTaskBtn').addEventListener('click', async () => {
+        const title = document.getElementById('taskTitle').value;
+        if(!title) return;
+        await fetch("/api/todos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title,
+                priority: document.getElementById('taskPriority').value,
+                dueDate: document.getElementById('taskDate').value || null,
+                completed: false
+            })
+        });
+        document.getElementById('taskTitle').value = '';
+        fetchTasks();
+    });
+
+    async function toggleTask(id) {
+        await fetch(`/api/todos/${id}/toggle`, { method: "POST" });
+        fetchTasks();
+    }
+
+    async function deleteTask(id) {
+        await fetch(`/api/todos/${id}`, { method: "DELETE" });
+        fetchTasks();
+    }
+
+    fetchTasks();
+</script>
+</body>
+</html>
