@@ -58,9 +58,18 @@
 Secure login using Google OAuth2.
 
 ### 2. Task Dashboard
+
+![Task Reminder Screenshot](https://raw.githubusercontent.com/msnawin/TaskReminder-Secure1/7c323e92e636e6dc8d6e2b162c4da4c8a812598f/Screenshot%202025-12-29%20093521.png)
+
 Full Create / Read / Update / Delete (CRUD) functionality.
 
 ### 3. Reminder Email
+![Scheduler Running Screenshot](https://raw.githubusercontent.com/msnawin/TaskReminder-Secure1/7c323e92e636e6dc8d6e2b162c4da4c8a812598f/Screenshot%202025-12-29%20093735.png)
+
+![Email Sent Screenshot](https://raw.githubusercontent.com/msnawin/TaskReminder-Secure1/7c323e92e636e6dc8d6e2b162c4da4c8a812598f/Screenshot%202025-12-29%20093802.png)
+
+
+
 Automated reminder emails delivered to the user.
 
 ---
