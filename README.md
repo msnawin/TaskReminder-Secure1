@@ -53,6 +53,8 @@
 ## Application Screens
 
 ### 1. OAuth Login
+![Task Dashboard](https://raw.githubusercontent.com/msnawin/TaskReminder-Secure1/3465918370756780bfaebe315955ef3b906c8aa9/Screenshot%202025-12-29%20093435.png)
+
 Secure login using Google OAuth2.
 
 ### 2. Task Dashboard
