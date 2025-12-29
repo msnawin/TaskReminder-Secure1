@@ -1,150 +1,138 @@
-TaskReminder
-🔐 Secure & High-Performance Task Management System
+# TaskReminder – Secure Task Scheduler & Reminder System
 
-🚀 Built with Distributed SQL, OAuth2 Security, and Cloud-Native Architecture
+**TaskReminder** is a production-oriented task management and scheduling system focused on real-world backend engineering rather than basic CRUD. The system uses **Google OAuth2 authentication**, **background schedulers**, **distributed SQL**, and **cloud-native deployment** to deliver a secure and scalable reminder platform.
 
-📌 Project Overview
+---
 
-TaskReminder is a production-oriented task management application built to simulate the architecture and constraints of real-world SaaS systems.
+## Project Components
 
-Instead of focusing only on CRUD operations, this project emphasizes security, scalability, performance, and cloud deployment challenges that backend engineers face in production environments.
+* **Backend:** Spring Boot + OAuth2 + Distributed SQL (Deployed)
+* **Frontend:** Thymeleaf-based UI
+* **Scheduler:** Background task reminder engine
+* **Email System:** Asynchronous SMTP notifications
 
-Users authenticate using Google OAuth2, manage their tasks securely, and receive automated email reminders — all backed by a distributed SQL database and asynchronous background processing.
+> **Note: No Local Backend Setup Required**
+> The backend is already deployed and production-ready. Users can authenticate, manage tasks, and receive reminder emails without running anything locally.
 
-⚙️ Core Infrastructure
-🚀 Backend Framework
+---
 
-The backend is developed using Spring Boot 3.4.x and Java 21, ensuring modern JVM performance and long-term maintainability.
+## Key Features
 
-This stack provides:
+### 🔐 Secure Google OAuth2 Authentication
+* Passwordless login experience.
+* **Spring Security** protected routes.
+* No user credentials stored within the application database.
 
-Faster startup times
+### 📝 Task Management
+* Create, update, and delete tasks.
+* Full support for **Due Dates**.
+* Priority-based task organization.
 
-Efficient memory management
+### ⏰ Automated Task Scheduler
+* Background scheduler runs periodically.
+* Automatically detects due tasks.
+* Designed specifically for production workloads.
 
-Clean dependency handling
+### 📧 Email Reminder System
+* **Asynchronous** email sending to prevent UI blocking.
+* Reliable cloud SMTP delivery via **Brevo**.
+* Ensures the UI remains responsive during high-volume notifications.
 
-Production-ready configuration support
+### 🗄️ Distributed SQL Database
+* Powered by **TiDB Cloud**.
+* Horizontally scalable and fault-tolerant architecture.
+* MySQL-compatible using **JPA**.
 
-The architecture is designed to handle high request throughput while remaining simple to extend and maintain.
+### ☁️ Cloud-Native Deployment
+* Fully **Dockerized** containerization.
+* Deployed on **Render**.
+* Strict environment-based configuration for security.
 
-🔐 Authentication & Security
+---
 
-Authentication is implemented using Google OAuth 2.0, providing a passwordless and secure login experience.
+## Application Screens
 
-Key security benefits:
+### 1. OAuth Login
+Secure login using Google OAuth2.
 
-No passwords are stored in the application
+### 2. Task Dashboard
+Full Create / Read / Update / Delete (CRUD) functionality.
 
-Reduced risk of credential leaks
+### 3. Reminder Email
+Automated reminder emails delivered to the user.
 
-Industry-standard authentication flow
+---
 
-Protected routes enforced using Spring Security
+## Task Scheduler – Execution Flow
 
-Each user interaction is tied to a secure session created after successful OAuth authentication.
+1.  **User logs in** using Google OAuth2.
+2.  **Secure session** is created by Spring Security.
+3.  User **creates or updates** a task.
+4.  Task data is stored in **TiDB Cloud**.
+5.  **Background scheduler** runs every **60 seconds**.
+6.  Due tasks trigger **reminder emails asynchronously**.
 
-☁️ Database (Distributed SQL)
+---
 
-Instead of relying on a traditional single-node database, TaskReminder uses TiDB Cloud, a serverless distributed SQL database.
+## Engineering Challenges and Solutions
 
-Why this matters:
+| Challenge | Problem | Solution |
+| :--- | :--- | :--- |
+| **SMTP Port Restrictions** | Cloud platforms block Port 587. | Switched to **Port 2525** using Brevo SMTP. |
+| **Email Delays** | Email sending blocked UI threads. | Implemented **Asynchronous** email processing. |
+| **Database Scalability** | Single-node database limits. | Adopted **Distributed SQL** using TiDB Cloud. |
+| **Secret Management** | Secrets exposed in source code. | Used **Environment variable injection**. |
+| **Free Tier DB Timeouts** | Connection pool exhaustion. | Performed **HikariCP tuning**. |
 
-Horizontally scalable without schema changes
+---
 
-Fault-tolerant by design
+## Tech Stack
 
-MySQL-compatible (easy JPA integration)
+### Backend
+* Java 21
+* Spring Boot
+* Spring Security
+* OAuth2
+* Spring Data JPA
+* Spring Scheduler
+* JavaMailSender
 
-Suitable for real production workloads
+### Database
+* **TiDB Cloud** (Distributed SQL)
 
-All task data is persisted using Spring Data JPA, ensuring clean entity mapping and transactional safety.
+### Email
+* **Brevo SMTP** (Port 2525)
 
-✉️ Email & Notification System
+### Deployment
+* Docker
+* Render
 
-Automated reminders are a core feature of TaskReminder.
+### Frontend
+* Thymeleaf
+* Bootstrap
 
-The system uses Brevo SMTP Relay configured on Port 2525, which avoids common cloud SMTP restrictions and ensures reliable delivery.
+---
 
-Design highlights:
+## Project Structure
 
-Emails are sent asynchronously to prevent UI delays
+```text
+TaskReminder/
+├── src/
+├── pom.xml
+├── Dockerfile
+├── .dockerignore
+├── templates/
+├── static/
+└── README.md
+## Security Highlights
 
-A background scheduler checks for due tasks periodically
+* ✅ **No passwords stored** in the database.
+* ✅ **OAuth2-based** authentication flow.
+* ✅ **Environment-based** secret management.
+* ✅ **Spring Security** route protection.
 
-SMTP communication is production-tested
+---
 
-This approach keeps the user experience fast while ensuring timely notifications.
+## Author
 
-🐳 Containerization & Deployment
-
-The application is fully containerized using Docker and deployed on Render.
-
-Deployment benefits:
-
-Consistent runtime across environments
-
-Faster deployments using multi-stage Docker builds
-
-Smaller image sizes
-
-Easy scalability
-
-All sensitive configuration values (database URLs, OAuth credentials, SMTP keys) are injected via environment variables, following security best practices.
-
-🖼️ Visual Technical Proof
-🔐 Security Layer – OAuth Login
-
-📸 Screenshot: Google Account Selection Screen
-
-This screenshot proves:
-
-OAuth2 authentication is active
-
-Routes are protected by Spring Security
-
-🖥️ User Interface – Task Dashboard
-
-📸 Screenshot: Main Task List UI
-
-This demonstrates:
-
-Full task Create / Read / Update / Delete functionality
-
-Responsive UI built with Thymeleaf and Bootstrap
-
-🗄️ Data Integrity – Database Verification
-
-📸 Screenshot: TiDB Chat2Query Output
-
-This validates:
-
-Successful data persistence
-
-Connectivity to a remote distributed database cluster
-
-📧 Email Service – System Heartbeat
-
-📸 Screenshot: Reminder Email in Gmail
-
-This confirms:
-
-Background scheduler execution
-
-Successful SMTP handshake in production
-
-🧠 Engineering Challenges & Solutions
-⚠️ Challenge	✅ Solution
-Cloud blocks SMTP Port 587	Migrated to Port 2525
-DB timeouts on free tier	Tuned HikariCP connection pooling
-Secrets in source code	Environment variable injection
-Email delays UI	Asynchronous mail processing
-Single-node DB limits	Distributed SQL with TiDB
-🔄 Application Workflow
-
-1️⃣ User logs in securely via Google OAuth2
-2️⃣ Spring Security creates a secure session
-3️⃣ User creates or updates a task
-4️⃣ Task data is stored in TiDB Cloud via JPA
-5️⃣ Background scheduler runs every 60 seconds
-6️⃣ Due tasks trigger reminder emails via Brevo SMTP
+**Nawin M. S.**
