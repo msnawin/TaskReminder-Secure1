@@ -18,7 +18,7 @@ public class EmailReminderScheduler {
 
     @Scheduled(cron = "0 00 6 * * *", zone = "Asia/Kolkata") // Set for 8:55 PM
     public void checkReminders() {
-        System.out.println("--- Scheduler Started at 8:55 PM ---");
+
         List<Todo> tasks = todoRepository.findByDueDateAndCompleted(LocalDate.now(), false);
 
         System.out.println("Tasks found for today: " + tasks.size());
